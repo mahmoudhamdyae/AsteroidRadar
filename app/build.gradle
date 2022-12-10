@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion 33
@@ -41,34 +41,45 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha04'
 
+    // View Model
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    // Live Data
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation 'androidx.fragment:fragment-ktx:1.5.4'
 
-    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
-    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
+    // Moshi
     implementation "com.squareup.moshi:moshi:1.8.0"
     implementation "com.squareup.moshi:moshi-kotlin:1.8.0"
 
+    // Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
 
+    // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
 
+    // Recycler View
     implementation "androidx.recyclerview:recyclerview:1.2.1"
 
+    // Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
+    // Room
     implementation "androidx.room:room-ktx:2.5.0-rc01"
     implementation "androidx.room:room-runtime:2.5.0-rc01"
     kapt "androidx.room:room-compiler:2.5.0-rc01"
 
-    implementation "android.arch.work:work-runtime-ktx:1.0.1"
+    // Work Manager
+//    implementation "android.arch.work:work-runtime-ktx:1.0.1"
 
+    // Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
