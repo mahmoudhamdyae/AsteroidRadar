@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.api.Api
+import com.udacity.asteroidradar.api.asDatabaseModel
 import com.udacity.asteroidradar.databse.AsteroidDatabase
 import com.udacity.asteroidradar.databse.asDomainModel
 import com.udacity.asteroidradar.domain.Asteroid
@@ -33,9 +34,9 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         withContext(Dispatchers.IO) {
             val asteroidsList = Api.retrofitService.getAsteroidsAsync().await()
 
-//            val dao = database.dao()
-//            dao.delAll()
-//            dao.insertAll(*asteroidsList.asDatabaseModel())
+            val dao = database.dao()
+            dao.delAll()
+            dao.insertAll(*asteroidsList.asDatabaseModel())
         }
     }
 

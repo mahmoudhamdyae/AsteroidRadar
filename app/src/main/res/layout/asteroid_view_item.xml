@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="property"
+            type="com.udacity.asteroidradar.domain.Asteroid" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_background">
+
+        <TextView
+            android:id="@+id/asteroid_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{property.codename}"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="68347 (2001 KB67)" />
+
+        <TextView
+            android:id="@+id/asteroid_close_approach_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{property.closeApproachDate}"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/asteroid_name"
+            tools:text="2020-02-08" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/asteroid_image_status_content_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:statusIcon="@{property.isPotentiallyHazardous}"
+            tools:src="@drawable/ic_status_normal" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -23,4 +23,5 @@
     <!-- Content Descriptions -->
     <string name="image_of_the_day_content_description">Image of the Day</string>
     <string name="help_button_content_description">Help</string>
+    <string name="asteroid_image_status_content_description">Asteroid Status</string>
 </resources>
