@@ -57,6 +57,5 @@ fun bindImage(imageView: ImageView, imgUrl: String?) {
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
     val adapter = recyclerView.adapter as AsteroidAdapter
-    val data2 = listOf(Asteroid(0, "2", "3", 1.1, 2.1, 3.1, 4.1, false))
-    adapter.submitList(data2)
+    adapter.submitList(data)
 }

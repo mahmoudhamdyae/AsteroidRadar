@@ -26,7 +26,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val asteroids = asteroidRepository.asteroids
 
     init {
-//        getAsteroids()
+        getAsteroids()
         getPictureOfDay()
     }
 
@@ -43,7 +43,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun getPictureOfDay() {
         viewModelScope.launch {
             try {
-                _pictureOfDay.value = asteroidRepository.getPictureOfDay()
+                _pictureOfDay.value = asteroidRepository.refreshPictureOfDay()
             }
             catch (exception: Exception) {
                 _errorMessage.value = exception.toString()
