@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,6 +40,10 @@ class MainFragment : Fragment() {
         viewModel.loadingState.onEach {
             binding.statusLoadingWheel.isVisible = it
         }.launchIn(lifecycleScope)
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
 
         setHasOptionsMenu(true)
 

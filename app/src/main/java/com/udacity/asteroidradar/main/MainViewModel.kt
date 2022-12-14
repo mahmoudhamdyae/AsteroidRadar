@@ -1,115 +1,6 @@
-//package com.udacity.asteroidradar.main
-//
-//import android.app.Application
-//import android.provider.SyncStateContract.Helpers.insert
-//import androidx.lifecycle.AndroidViewModel
-//import androidx.lifecycle.LiveData
-//import androidx.lifecycle.MutableLiveData
-//import androidx.lifecycle.viewModelScope
-//import com.google.gson.Gson
-//import com.google.gson.JsonParser
-//import com.udacity.asteroidradar.api.Api
-//import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-//import com.udacity.asteroidradar.databse.AsteroidDao
-//import com.udacity.asteroidradar.databse.AsteroidDatabase
-//import com.udacity.asteroidradar.databse.getDatabase
-//import com.udacity.asteroidradar.domain.Asteroid
-//import com.udacity.asteroidradar.domain.PictureOfDay
-//import com.udacity.asteroidradar.repository.AsteroidRepository
-//import kotlinx.coroutines.Dispatchers
-//import kotlinx.coroutines.launch
-//import kotlinx.coroutines.withContext
-//import org.json.JSONObject
-//
-//class MainViewModel(application: Application) : AndroidViewModel(application) {
-//
-//    private val _pictureOfDay = MutableLiveData<PictureOfDay>()
-//    val pictureOfDay: LiveData<PictureOfDay>
-//        get() = _pictureOfDay
-//
-//    private val _errorMessage = MutableLiveData<String>()
-//    val errorMessage: LiveData<String>
-//        get() = _errorMessage
-//
-//    private val database = getDatabase(application)
-//    private val asteroidRepository = AsteroidRepository(database)
-//
-//    private val _asteroids = MutableLiveData<List<Asteroid>>()
-//    val asteroids: LiveData<List<Asteroid>>
-//        get() = _asteroids
-////    val asteroids = asteroidRepository.asteroids
-//
-//    private val asteroidDao: AsteroidDao by lazy {
-//        getDatabase(application).asteroidDao()
-//    }
-//
-//    init {
-//        viewModelScope.launch {
-//            val asteroids = getAsteroids()
-////            _state.value = AsteroidState(false, asteroids)
-//            _asteroids.value = asteroids
-//
-////            val pictureOfDay = getPicture()
-////            _picture.value = PictureState(pictureOfDay)
-//        }
-//    }
-//
-////    init {
-////        getAsteroids()
-////        getPictureOfDay()
-////    }
-//
-////    private fun getAsteroids() {
-////        viewModelScope.launch {
-////            try {
-//////                asteroidRepository.refreshAsteroids()
-////
-//////                val response = Api.retrofitService.getAsteroids()
-//////                val gson = JsonParser().parse(response.toString()).asJsonObject
-//////
-//////                val jo2 = JSONObject(gson.toString())
-//////                val asteroids = parseAsteroidsJsonResult(jo2)
-//////
-//////                database.asteroidDao().insert(asteroids)
-//////                database.asteroidDao().getAsteroids()
-////
-////                val gson = Gson()
-////                val asteroids = Api.retrofitService.getAsteroids()
-////
-////            } catch (exception: Exception) {
-////                _errorMessage.value = exception.toString()
-////            }
-////        }
-////    }
-//
-//    private suspend fun getAsteroids(): List<Asteroid> = withContext(Dispatchers.IO) {
-//        try {
-//            val response = Api.retrofitService.getAsteroids()
-//            val gson = JsonParser().parse(response.toString()).asJsonObject
-//
-//            val jo2 = JSONObject(gson.toString())
-//            val asteroids = parseAsteroidsJsonResult(jo2)
-//
-//            asteroidDao.insert(asteroids)
-//            asteroidDao.getAsteroids()
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            asteroidDao.getAsteroids()
-//        }
-//    }
-//
-//    private fun getPictureOfDay() {
-//        viewModelScope.launch {
-//            try {
-//                _pictureOfDay.value = asteroidRepository.refreshPictureOfDay()
-//            }
-//            catch (exception: Exception) {
-//                _errorMessage.value = exception.toString()
-//            }
-//        }
-//    }
-//}
 package com.udacity.asteroidradar.main
+
+import com.udacity.asteroidradar.repository.AsteroidRepository
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -127,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _state: MutableStateFlow<AsteroidState> =
         MutableStateFlow(AsteroidState(true, emptyList()))
@@ -144,12 +35,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val loadingState = state.map { value -> value.loading }
 
     private val asteroidDao: AsteroidDao by lazy {
-        getDatabase(app).asteroidDao()
+        getDatabase(application).asteroidDao()
     }
 
-    private val pictureDao: PictureDao by lazy {
-        getDatabase(app).pictureOfDayDao()
-    }
+    private val database = getDatabase(application)
+    private val asteroidRepository = AsteroidRepository(database)
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
 
     init {
         viewModelScope.launch {
@@ -206,9 +100,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private suspend fun getPicture(): PictureOfDay? = withContext(Dispatchers.IO) {
         try {
-            val picture = Api.retrofitService.getPictureOfDay()
-            pictureDao.insert(picture)
-            pictureDao.getPicture(picture.url)
+            asteroidRepository.getPictureOfDay()
         } catch (e: Exception) {
             e.printStackTrace()
             null

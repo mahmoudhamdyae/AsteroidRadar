@@ -7,11 +7,10 @@ import androidx.room.RoomDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
 
-@Database(entities = [Asteroid::class, PictureOfDay::class], version = 1, exportSchema = false)
+@Database(entities = [Asteroid::class], version = 1, exportSchema = false)
 abstract class AsteroidDatabase : RoomDatabase() {
 
     abstract fun asteroidDao(): AsteroidDao
-    abstract fun pictureOfDayDao(): PictureDao
 }
 
 private lateinit var INSTANCE: AsteroidDatabase
