@@ -18,10 +18,12 @@ class DetailFragment : Fragment() {
         val binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
+        // Get Asteroids from Previous Fragment
         val asteroid = DetailFragmentArgs.fromBundle(requireArguments()).selectedAsteroid
 
         binding.asteroid = asteroid
 
+        // Help Button Clicked
         binding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
         }
@@ -29,6 +31,7 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    // Display Dialogue
     private fun displayAstronomicalUnitExplanationDialog() {
         val builder = AlertDialog.Builder(requireActivity())
             .setMessage(getString(R.string.astronomica_unit_explanation))

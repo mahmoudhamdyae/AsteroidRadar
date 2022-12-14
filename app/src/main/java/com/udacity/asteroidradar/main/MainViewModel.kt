@@ -19,19 +19,24 @@ enum class ApiFilter {
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
+    // Database
     private val database = getDatabase(application)
     private val asteroidRepository = AsteroidRepository(database)
 
+    // Asteroids
     var asteroids: LiveData<List<Asteroid>> = asteroidRepository.asteroidsThisWeek
 
+    // Picture of Day
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay: LiveData<PictureOfDay>
         get() = _pictureOfDay
 
+    // State of API
     private val _state = MutableLiveData<AsteroidState>()
     val state: LiveData<AsteroidState>
         get() = _state
 
+    // Error Message
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String>
         get() = _errorMessage

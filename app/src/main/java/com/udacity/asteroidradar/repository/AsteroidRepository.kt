@@ -11,15 +11,18 @@ import org.json.JSONObject
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
+    // All in Room
     val asteroidsAll: LiveData<List<Asteroid>> =
         database.asteroidDao().getAsteroids()
 
+    // Asteroids This Week
     val asteroidsThisWeek: LiveData<List<Asteroid>> =
         database.asteroidDao().getAsteroidsThisWeek(
             startDay = DayProvider.getToday(),
             endDay = DayProvider.getSevenDaysLater()
         )
 
+    // Asteroids Only Today
     val asteroidsToday: LiveData<List<Asteroid>> =
         database.asteroidDao().getAsteroidsToday(
             today = DayProvider.getToday()
@@ -37,6 +40,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         val jo2 = JSONObject(gson.toString())
         val asteroids = parseAsteroidsJsonResult(jo2)
 
+        // Local Room
         val dao = database.asteroidDao()
         dao.insert(asteroids)
     }

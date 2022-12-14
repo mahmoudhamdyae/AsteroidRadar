@@ -3,17 +3,13 @@ package com.udacity.asteroidradar.main
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.udacity.asteroidradar.AsteroidAdapter
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @Suppress("DEPRECATION")
 class MainFragment : Fragment() {
@@ -30,13 +26,14 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         binding.viewModel = viewModel
 
+        // Recycler View
         val asteroidAdapter = AsteroidAdapter(AsteroidAdapter.OnClickListener {
             findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
         })
-
         binding.asteroidRecycler.layoutManager = GridLayoutManager(context,1)
         binding.asteroidRecycler.adapter = asteroidAdapter
 
+        // Error Message
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
@@ -54,6 +51,7 @@ class MainFragment : Fragment() {
 
     @Deprecated("Deprecated in Java", ReplaceWith("true"))
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Filter Results
         viewModel.updateFilter(
             when (item.itemId) {
                 R.id.show_all_menu -> ApiFilter.SHOW_WEEK
