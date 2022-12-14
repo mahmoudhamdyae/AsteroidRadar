@@ -1,44 +1,44 @@
 package com.udacity.asteroidradar.api
 
 import com.google.gson.JsonObject
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.domain.PictureOfDay
-import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.nasa.gov/"
 
 private const val API_KEY = "LYdNmsl0aXazf9fqJRZHAEchmZtEj7LIXd6M7a4F"
 
 /**
- * Build the Moshi object that Retrofit will be using.
- */
-private val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
-
-/**
  * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
  * object.
  */
-private val retrofit = Retrofit.Builder()
-//    .addConverterFactory(GsonConverterFactory.create())
-    .addConverterFactory(ScalarsConverterFactory.create())
-//    .addConverterFactory(MoshiConverterFactory.create(moshi))
-//    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-    .baseUrl(BASE_URL)
+private val retrofit = Retrofit
+    .Builder()
+    .baseUrl(Constants.BASE_URL)
+    .addConverterFactory(GsonConverterFactory.create())
     .build()
 
 interface Service {
 
-    @GET("neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=$API_KEY")
-    suspend fun getAsteroids(): JsonObject
+//    @GET("neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=$API_KEY")
+//    suspend fun getAsteroids(): JsonObject
+@GET("neo/rest/v1/feed/")
+suspend fun getAsteroids(
+    @Query("start_date") startDate: String,
+    @Query("end_date") endDate: String,
+    @Query("api_key") apiKey: String = Constants.API_KEY
+): JsonObject
 
-    @GET("planetary/apod?api_key=$API_KEY")
-    fun getPictureOfDayAsync(): Deferred<PictureOfDay>
+//    @GET("planetary/apod?api_key=$API_KEY")
+//    fun getPictureOfDayAsync(): Deferred<PictureOfDay>
+@GET("planetary/apod/")
+suspend fun getPictureOfDay(
+    @Query("api_key") apiKey: String = Constants.API_KEY
+): PictureOfDay
 }
 
 /**

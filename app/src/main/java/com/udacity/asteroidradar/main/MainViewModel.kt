@@ -114,6 +114,7 @@ package com.udacity.asteroidradar.main
 import android.app.Application
 import androidx.lifecycle.*
 import com.google.gson.JsonParser
+import com.udacity.asteroidradar.api.Api
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.databse.AsteroidDao
 import com.udacity.asteroidradar.databse.AsteroidDatabase
@@ -131,8 +132,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val repository: AsteroidRepository by lazy { AsteroidRepository() }
 
     private val _state: MutableStateFlow<AsteroidState> =
         MutableStateFlow(AsteroidState(true, emptyList()))
@@ -192,7 +191,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private suspend fun getAsteroids(): List<Asteroid> = withContext(Dispatchers.IO) {
         try {
-            val response = repository.service.getAsteroids(
+            val response = Api.retrofitService.getAsteroids(
                 DayProvider.getToday(),
                 DayProvider.getSevenDaysLater()
             )
@@ -211,7 +210,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private suspend fun getPicture(): PictureOfDay? = withContext(Dispatchers.IO) {
         try {
-            val picture = repository.service.getPicture()
+            val picture = Api.retrofitService.getPictureOfDay()
             pictureDao.insert(picture)
             pictureDao.getPicture(picture.url)
         } catch (e: Exception) {
