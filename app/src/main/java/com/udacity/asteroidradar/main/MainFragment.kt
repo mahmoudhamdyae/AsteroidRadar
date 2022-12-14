@@ -37,10 +37,6 @@ class MainFragment : Fragment() {
         binding.asteroidRecycler.layoutManager = GridLayoutManager(context,1)
         binding.asteroidRecycler.adapter = asteroidAdapter
 
-        viewModel.loadingState.onEach {
-            binding.statusLoadingWheel.isVisible = it
-        }.launchIn(lifecycleScope)
-
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
