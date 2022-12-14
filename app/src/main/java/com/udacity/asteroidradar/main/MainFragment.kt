@@ -36,8 +36,8 @@ class MainFragment : Fragment() {
         binding.asteroidRecycler.layoutManager = GridLayoutManager(context,1)
         binding.asteroidRecycler.adapter = asteroidAdapter
 
-        viewModel.loadingState.onEach { isLoading ->
-            binding.statusLoadingWheel.isVisible = isLoading
+        viewModel.loadingState.onEach {
+            binding.statusLoadingWheel.isVisible = it
         }.launchIn(lifecycleScope)
 
         setHasOptionsMenu(true)

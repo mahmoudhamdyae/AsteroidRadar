@@ -116,13 +116,9 @@ import androidx.lifecycle.*
 import com.google.gson.JsonParser
 import com.udacity.asteroidradar.api.Api
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.databse.AsteroidDao
-import com.udacity.asteroidradar.databse.AsteroidDatabase
-import com.udacity.asteroidradar.databse.DayProvider
-import com.udacity.asteroidradar.databse.PictureDao
+import com.udacity.asteroidradar.databse.*
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
-import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -148,11 +144,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val loadingState = state.map { value -> value.loading }
 
     private val asteroidDao: AsteroidDao by lazy {
-        AsteroidDatabase.getDatabase(app).asteroidDao()
+        getDatabase(app).asteroidDao()
     }
 
     private val pictureDao: PictureDao by lazy {
-        AsteroidDatabase.getDatabase(app).pictureOfDayDao()
+        getDatabase(app).pictureOfDayDao()
     }
 
     init {
