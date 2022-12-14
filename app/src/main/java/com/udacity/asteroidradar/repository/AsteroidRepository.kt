@@ -14,10 +14,12 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     val asteroids: LiveData<List<Asteroid>> =
         database.asteroidDao().getAsteroids()
 
-    suspend fun refreshAsteroids() {
+    suspend fun refreshAsteroids(startDate: String = DayProvider.getToday(),
+                                 endDate: String = DayProvider.getSevenDaysLater()
+    ) {
         val response = Api.retrofitService.getAsteroids(
-            DayProvider.getToday(),
-            DayProvider.getSevenDaysLater()
+            startDate,
+            endDate
         )
         val gson = JsonParser().parse(response.toString()).asJsonObject
 
