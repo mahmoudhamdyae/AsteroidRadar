@@ -46,13 +46,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         get() = _errorMessage
 
     init {
+        getPicture()
         viewModelScope.launch {
             val asteroids = getAsteroids()
             _state.value = AsteroidState(false, asteroids)
             cachedAsteroids = asteroids
-
-            val pictureOfDay = getPicture()
-            _picture.value = PictureState(pictureOfDay)
         }
     }
 
@@ -98,12 +96,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getPicture(): PictureOfDay? = withContext(Dispatchers.IO) {
-        try {
-            asteroidRepository.getPictureOfDay()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
+    private fun getPicture() {
+        viewModelScope.launch {
+            try {
+                _picture.value = PictureState(asteroidRepository.getPictureOfDay())
+            } catch (exception: Exception) {
+                _errorMessage.value = exception.toString()
+            }
         }
     }
 }

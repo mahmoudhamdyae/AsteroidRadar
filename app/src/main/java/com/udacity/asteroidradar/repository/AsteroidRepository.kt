@@ -28,17 +28,6 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 //        }
 
     suspend fun refreshAsteroids() {
-//        withContext(Dispatchers.IO) {
-//            val asteroidsList = Api.retrofitService.getAsteroids()
-//            val gson = JsonParser().parse(asteroidsList.toString()).asJsonObject
-//
-//            val jo2 = JSONObject(gson.toString())
-//            val asteroids = parseAsteroidsJsonResult(jo2)
-//
-//            val dao = database.asteroidDao()
-////            dao.delAll()
-//            dao.insert(asteroids)
-//       }
     }
 
     suspend fun getPictureOfDay() = Api.retrofitService.getPictureOfDay()
