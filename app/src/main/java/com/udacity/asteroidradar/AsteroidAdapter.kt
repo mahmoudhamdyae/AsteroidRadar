@@ -11,28 +11,18 @@ import com.udacity.asteroidradar.domain.Asteroid
 class AsteroidAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<Asteroid, AsteroidAdapter.AsteroidPropertyViewHolder>(DiffCallback) {
 
-
-    private var asteroids: List<Asteroid> = emptyList()
-
-    fun setAsteroids(data: List<Asteroid>) {
-        this.asteroids = data
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ) = AsteroidPropertyViewHolder(AsteroidViewItemBinding.inflate(LayoutInflater.from(parent.context)))
 
     override fun onBindViewHolder(holder: AsteroidPropertyViewHolder, position: Int) {
-        val asteroid = asteroids[position]//getItem(position)
+        val asteroid = getItem(position)
         holder.itemView.setOnClickListener {
             onClickListener.onClick(asteroid)
         }
         holder.bind(asteroid)
     }
-
-    override fun getItemCount() = asteroids.size
 
     /**
      * The AsteroidPropertyViewHolder constructor takes the binding variable from the associated

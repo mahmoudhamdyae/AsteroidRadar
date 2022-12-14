@@ -36,10 +36,6 @@ class MainFragment : Fragment() {
         binding.asteroidRecycler.layoutManager = GridLayoutManager(context,1)
         binding.asteroidRecycler.adapter = asteroidAdapter
 
-        viewModel.state.onEach { asteroidState ->
-            asteroidAdapter.setAsteroids(asteroidState.asteroids)
-        }.launchIn(lifecycleScope)
-
         viewModel.loadingState.onEach { isLoading ->
             binding.statusLoadingWheel.isVisible = isLoading
         }.launchIn(lifecycleScope)
