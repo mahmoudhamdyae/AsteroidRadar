@@ -41,13 +41,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha04'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha05'
 
     // View Model
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     // Live Data
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
-    implementation 'androidx.fragment:fragment-ktx:1.5.4'
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
@@ -74,7 +74,7 @@ dependencies {
     kapt "androidx.room:room-compiler:2.5.0-rc01"
 
     // Work Manager
-//    implementation "android.arch.work:work-runtime-ktx:1.0.1"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
 
     // Test
     testImplementation 'junit:junit:4.13.2'
