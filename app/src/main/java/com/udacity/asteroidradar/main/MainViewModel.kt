@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.databse.DayProvider
 import com.udacity.asteroidradar.databse.getDatabase
+import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
@@ -21,7 +22,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val asteroidRepository = AsteroidRepository(database)
 
-    val asteroids = asteroidRepository.asteroids
+//    private val _asteroids = MutableLiveData<List<Asteroid>>()
+//    val asteroids: LiveData<List<Asteroid>>
+//        get() = _asteroids
+    var asteroids: LiveData<List<Asteroid>> = asteroidRepository.asteroidsThisWeek
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay: LiveData<PictureOfDay>
@@ -46,6 +50,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 ApiFilter.SHOW_WEEK -> {
                     _state.value = AsteroidState.LOADING
                     asteroidRepository.refreshAsteroids()
+                    asteroids = asteroidRepository.asteroidsThisWeek
                     _state.value = AsteroidState.DONE
                 }
                 ApiFilter.SHOW_TODAY -> {
@@ -54,11 +59,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         startDate = DayProvider.getToday(),
                         endDate = DayProvider.getToday()
                     )
+                    asteroids = asteroidRepository.asteroidsToday
                     _state.value = AsteroidState.DONE
                 }
                 else -> {
                     _state.value = AsteroidState.LOADING
                     asteroidRepository.refreshAsteroids()
+                    asteroids = asteroidRepository.asteroidsAll
                     _state.value = AsteroidState.DONE
                 }
             }
@@ -70,6 +77,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _state.value = AsteroidState.LOADING
                 asteroidRepository.refreshAsteroids()
+                asteroids = asteroidRepository.asteroidsAll
                 _state.value = AsteroidState.DONE
             } catch (exception: Exception) {
                 if (asteroids.value!!.isEmpty()) {

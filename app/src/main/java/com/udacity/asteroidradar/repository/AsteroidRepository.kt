@@ -11,8 +11,19 @@ import org.json.JSONObject
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
-    val asteroids: LiveData<List<Asteroid>> =
+    val asteroidsAll: LiveData<List<Asteroid>> =
         database.asteroidDao().getAsteroids()
+
+    val asteroidsThisWeek: LiveData<List<Asteroid>> =
+        database.asteroidDao().getAsteroidsThisWeek(
+            startDay = DayProvider.getToday(),
+            endDay = DayProvider.getSevenDaysLater()
+        )
+
+    val asteroidsToday: LiveData<List<Asteroid>> =
+        database.asteroidDao().getAsteroidsToday(
+            today = DayProvider.getToday()
+        )
 
     suspend fun refreshAsteroids(startDate: String = DayProvider.getToday(),
                                  endDate: String = DayProvider.getSevenDaysLater()
@@ -27,7 +38,6 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         val asteroids = parseAsteroidsJsonResult(jo2)
 
         val dao = database.asteroidDao()
-        dao.delAll()
         dao.insert(asteroids)
     }
 
