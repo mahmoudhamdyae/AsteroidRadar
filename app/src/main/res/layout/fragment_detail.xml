@@ -20,12 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/image_of_the_day_content_description"
             app:asteroidStatusImage="@{asteroid.potentiallyHazardous}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/asteroid_safe"
-            android:contentDescription="@string/image_of_the_day_content_description" />
+            tools:srcCompat="@drawable/asteroid_safe" />
 
         <ScrollView
             android:layout_width="0dp"
@@ -46,10 +46,12 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@style/TextMain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/close_approach_data_title"
-                        android:textColor="@color/default_text_color" />
+                        android:textColor="@color/default_text_color"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/close_approach_date"
@@ -75,6 +77,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="@style/TextMain"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/absolute_magnitude_title"
@@ -94,13 +97,14 @@
                         android:id="@+id/help_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:contentDescription="@string/help_button_content_description"
                         android:padding="16dp"
-                        app:srcCompat="@drawable/ic_help_circle"
-                        android:contentDescription="@string/help_button_content_description" />
+                        app:srcCompat="@drawable/ic_help_circle" />
 
                 </LinearLayout>
 
                 <TextView
+                    style="@style/TextMain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -117,6 +121,7 @@
                     tools:text="0.82 km" />
 
                 <TextView
+                    style="@style/TextMain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -133,6 +138,7 @@
                     tools:text="11.9 km/s" />
 
                 <TextView
+                    style="@style/TextMain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

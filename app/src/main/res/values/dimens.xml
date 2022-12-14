@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Details Fragment -->
+    <dimen name="text_main_size">16sp</dimen>
+
     <!-- Asteroid View Item -->
     <dimen name="card_view_padding">8dp</dimen>
     <dimen name="text_view_margin">4dp</dimen>
