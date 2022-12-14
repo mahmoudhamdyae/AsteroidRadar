@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DayProvider {
+    /**
+     * Get Today in Format yyyy-MM-dd
+     */
     fun getToday(): String {
         val calendar = Calendar.getInstance()
         val currentTime = calendar.time
@@ -12,6 +15,9 @@ object DayProvider {
         return dateFormat.format(currentTime)
     }
 
+    /**
+     * Get Seven Days from Now in Format yyyy-MM-dd
+     */
     fun getSevenDaysLater(): String {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, 7)
