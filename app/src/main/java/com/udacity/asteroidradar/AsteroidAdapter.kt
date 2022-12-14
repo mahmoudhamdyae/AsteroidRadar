@@ -46,10 +46,6 @@ class AsteroidAdapter(private val onClickListener: OnClickListener) :
         }
     }
 
-//    class AsteroidPropertyViewHolder(private var binding: AsteroidViewItemBinding):
-//        RecyclerView.AsteroidPropertyViewHolder(binding.root) {
-//    }
-
     /**
      * Allows the RecyclerView to determine which items have changed when the [List] of [Asteroid]
      * has been updated.
