@@ -25,10 +25,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val state = _state.asStateFlow()
 
-    private val _picture: MutableLiveData<PictureState> =
-        MutableLiveData(PictureState(null))
-
-    val picture: LiveData<PictureState> = _picture
+    private val _picture = MutableLiveData<PictureOfDay>()
+    val picture: LiveData<PictureOfDay>
+        get() = _picture
 
     private lateinit var cachedAsteroids: List<Asteroid>
 
@@ -99,7 +98,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun getPicture() {
         viewModelScope.launch {
             try {
-                _picture.value = PictureState(asteroidRepository.getPictureOfDay())
+                _picture.value = asteroidRepository.getPictureOfDay()
             } catch (exception: Exception) {
                 _errorMessage.value = exception.toString()
             }
@@ -108,7 +107,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 }
 
 data class AsteroidState(val loading: Boolean, val asteroids: List<Asteroid>)
-
-data class PictureState(val picture: PictureOfDay?)
 
 enum class ApiFilter(val value: String) { SHOW_WEEK("week"), SHOW_TODAY("today"), SHOW_SAVED("saved") }
