@@ -19,10 +19,43 @@ import kotlinx.coroutines.flow.onEach
 @Suppress("DEPRECATION")
 class MainFragment : Fragment() {
 
-//    private val viewModel: MainViewModel by lazy {
-//        ViewModelProvider(this)[MainViewModel::class.java]
-//    }
-//
+    private lateinit var binding: FragmentMainBinding
+    private lateinit var viewModel: MainViewModel
+
+    private lateinit var asteroidAdapter: AsteroidAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentMainBinding.inflate(inflater)
+        binding.lifecycleOwner = this
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        binding.viewModel = viewModel
+
+        setHasOptionsMenu(true)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        asteroidAdapter = AsteroidAdapter { asteroid ->
+            this.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
+        }
+
+        binding.asteroidRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.asteroidRecycler.adapter = asteroidAdapter
+
+
+        viewModel.state.onEach { asteroidState ->
+            asteroidAdapter.setAsteroids(asteroidState.asteroids)
+        }.launchIn(lifecycleScope)
+
+        viewModel.loadingState.onEach { isLoading ->
+            binding.statusLoadingWheel.isVisible = isLoading
+        }.launchIn(lifecycleScope)
+    }
+
 //    override fun onCreateView(
 //        inflater: LayoutInflater,
 //        container: ViewGroup?,
@@ -70,51 +103,5 @@ class MainFragment : Fragment() {
             }
         )
         return true
-    }
-
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
-    }
-
-    private lateinit var asteroidAdapter: AsteroidAdapter
-
-    private var _binding: FragmentMainBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMainBinding.inflate(inflater)
-        binding.lifecycleOwner = this
-
-        binding.viewModel = viewModel
-
-        setHasOptionsMenu(true)
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        asteroidAdapter = AsteroidAdapter { asteroid ->
-            this.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
-        }
-
-        binding.asteroidRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.asteroidRecycler.adapter = asteroidAdapter
-
-
-        viewModel.state.onEach { asteroidState ->
-            asteroidAdapter.setAsteroids(asteroidState.asteroids)
-        }.launchIn(lifecycleScope)
-
-        viewModel.loadingState.onEach { isLoading ->
-            binding.statusLoadingWheel.isVisible = isLoading
-        }.launchIn(lifecycleScope)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
