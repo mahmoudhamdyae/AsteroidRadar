@@ -21,7 +21,7 @@ import retrofit2.http.Query
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
-    //    val asteroids: LiveData<List<Asteroid>> =
+//        val asteroids: LiveData<List<Asteroid>> =
 //        database.asteroidDao().getAsteroids()
 //        Transformations.map(database.dao().getAsteroids()) {
 //            it.asDomainModel()

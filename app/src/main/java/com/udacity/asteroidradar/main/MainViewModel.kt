@@ -22,35 +22,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _state: MutableStateFlow<AsteroidState> =
         MutableStateFlow(AsteroidState(true, emptyList()))
-
     val state = _state.asStateFlow()
 
-    private val _picture = MutableLiveData<PictureOfDay>()
-    val picture: LiveData<PictureOfDay>
-        get() = _picture
-
     private lateinit var cachedAsteroids: List<Asteroid>
-
     val loadingState = state.map { value -> value.loading }
 
-    private val asteroidDao: AsteroidDao by lazy {
-        getDatabase(application).asteroidDao()
-    }
+    private val _asteroids = MutableLiveData<List<Asteroid>>()
+    val asteroids: LiveData<List<Asteroid>>
+        get() = _asteroids
 
-    private val database = getDatabase(application)
-    private val asteroidRepository = AsteroidRepository(database)
+    private val _pictureOfDay = MutableLiveData<PictureOfDay>()
+    val pictureOfDay: LiveData<PictureOfDay>
+        get() = _pictureOfDay
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
+    private val database = getDatabase(application)
+    private val asteroidRepository = AsteroidRepository(database)
+    private val asteroidDao = database.asteroidDao()
+
     init {
         getPicture()
-        viewModelScope.launch {
-            val asteroids = getAsteroids()
-            _state.value = AsteroidState(false, asteroids)
-            cachedAsteroids = asteroids
-        }
+        getAsteroids()
     }
 
     fun updateFilter(filter: ApiFilter) {
@@ -76,29 +71,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getAsteroids(): List<Asteroid> = withContext(Dispatchers.IO) {
-        try {
-            val response = Api.retrofitService.getAsteroids(
-                DayProvider.getToday(),
-                DayProvider.getSevenDaysLater()
-            )
-            val gson = JsonParser().parse(response.toString()).asJsonObject
+    private fun getAsteroids() {
+        viewModelScope.launch {
+            try {
+                val response = Api.retrofitService.getAsteroids(
+                    DayProvider.getToday(),
+                    DayProvider.getSevenDaysLater()
+                )
+                val gson = JsonParser().parse(response.toString()).asJsonObject
 
-            val jo2 = JSONObject(gson.toString())
-            val asteroids = parseAsteroidsJsonResult(jo2)
+                val jo2 = JSONObject(gson.toString())
+                val asteroids = parseAsteroidsJsonResult(jo2)
 
-            asteroidDao.insert(asteroids)
-            asteroidDao.getAsteroids()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            asteroidDao.getAsteroids()
+                asteroidDao.insert(asteroids)
+                val a = asteroidDao.getAsteroids()
+                _state.value = AsteroidState(false, a)
+                cachedAsteroids = a
+            } catch (e: Exception) {
+                e.printStackTrace()
+                val a = asteroidDao.getAsteroids()
+                _state.value = AsteroidState(false, a)
+                cachedAsteroids = a
+            }
         }
     }
 
     private fun getPicture() {
         viewModelScope.launch {
             try {
-                _picture.value = asteroidRepository.getPictureOfDay()
+                _pictureOfDay.value = asteroidRepository.getPictureOfDay()
             } catch (exception: Exception) {
                 _errorMessage.value = exception.toString()
             }
